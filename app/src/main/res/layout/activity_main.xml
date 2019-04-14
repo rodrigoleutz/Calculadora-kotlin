@@ -49,10 +49,10 @@
                     android:layout_width="40pt"
                     android:layout_height="40pt" android:id="@+id/buMul" android:textSize="30sp"
                     android:background="@color/cinza" android:textColor="@color/branco"/>
-            <Button
+            <ImageButton
                     android:layout_width="40pt"
-                    android:layout_height="40pt" android:id="@+id/buDel" android:textSize="30sp"
-                    android:background="@color/cinza" android:textColor="@color/branco" android:text="Del"/>
+                    android:layout_height="40pt" app:srcCompat="@android:drawable/ic_input_delete"
+                    android:id="@+id/buDel" android:background="@color/cinza"/>
         </TableRow>
         <TableRow android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center">
             <Button
