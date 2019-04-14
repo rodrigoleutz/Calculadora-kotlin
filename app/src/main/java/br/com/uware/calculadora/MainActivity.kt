@@ -85,6 +85,7 @@ class MainActivity : AppCompatActivity() {
     var oldOper: String = "*"
     var newOp: Boolean = true
     var conOp: Boolean = false
+    var pointBreak = false
     var result: Double? = null
 
     fun resetOper(){
@@ -97,7 +98,11 @@ class MainActivity : AppCompatActivity() {
         tvResult.text = conta
     }
     fun deletar(){
-        if(conta.length>0) conta = conta.substring(0,conta.length -1)
+        if(conta.length>0) {
+            if(conta.substring(conta.length - 1, conta.length) == ".") pointBreak = false
+            conta = conta.substring(0, conta.length - 1)
+
+        }
         tvResult.text = conta
     }
     fun buClick(btn: Button){
@@ -116,7 +121,12 @@ class MainActivity : AppCompatActivity() {
             bu7 -> conta = conta+"7"
             bu8 -> conta = conta+"8"
             bu9 -> conta = conta+"9"
-            buDot -> conta = conta+"."
+            buDot -> {
+                if(!pointBreak) {
+                    conta = conta + "."
+                    pointBreak = true
+                }
+            }
             buPlusMiss -> conta = "-"+conta
         }
         tvResult.text = conta
@@ -165,6 +175,7 @@ class MainActivity : AppCompatActivity() {
             conta = ""
         }
 
+        pointBreak = false
         newOp = true
         conOp = true
     }
