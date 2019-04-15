@@ -86,6 +86,7 @@ class MainActivity : AppCompatActivity() {
     var newOp: Boolean = true
     var conOp: Boolean = false
     var pointBreak = false
+    var minus = false
     var result: Double? = null
 
     fun resetOper(){
@@ -94,24 +95,32 @@ class MainActivity : AppCompatActivity() {
         oper = "*"
         newOp = true
         conOp = false
+        pointBreak = false
+        minus = false
         tvConta.text = contaInteira
         tvResult.text = conta
     }
     fun deletar(){
         if(conta.length>0) {
             if(conta.substring(conta.length - 1, conta.length) == ".") pointBreak = false
+            if(conta.substring(conta.length - 1, conta.length) == "-") minus = false
             conta = conta.substring(0, conta.length - 1)
-
         }
         tvResult.text = conta
     }
     fun buClick(btn: Button){
         if(newOp){
             conta = ""
-
         }
         when(btn){
-            bu0 -> conta = conta+"0"
+            bu0 -> {
+                if(conta == "0"){
+                    conta = conta
+                }
+                else {
+                    conta = conta + "0"
+                }
+            }
             bu1 -> conta = conta+"1"
             bu2 -> conta = conta+"2"
             bu3 -> conta = conta+"3"
@@ -127,7 +136,16 @@ class MainActivity : AppCompatActivity() {
                     pointBreak = true
                 }
             }
-            buPlusMiss -> conta = "-"+conta
+            buPlusMiss -> {
+                if(!minus) {
+                    conta = "-" + conta
+                    minus = true
+                }
+                else{
+                    conta = conta.substring(1,conta.length)
+                    minus = false
+                }
+            }
         }
         tvResult.text = conta
         newOp = false
@@ -147,8 +165,8 @@ class MainActivity : AppCompatActivity() {
         }
         else{
             when(oldOper){
-                "+" -> result = soma(oldNum,conta)
-                "-" -> result = menos(oldNum,conta)
+                "+" -> result = somar(oldNum,conta)
+                "-" -> result = diminuir(oldNum,conta)
                 "*" -> result = multiplicar(oldNum,conta)
                 "/" -> result = dividir(oldNum,conta)
                 "%" -> result = porcento(oldNum,conta)
@@ -162,6 +180,7 @@ class MainActivity : AppCompatActivity() {
                 buDiv -> oper = "/"
                 buPer -> oper = "%"
                 buEq -> {
+                    if(oldNum.substring(oldNum.length -2,oldNum.length) == ".0") oldNum = oldNum.substring(0,oldNum.length -2)
                     oper = "=" + oldNum
                 }
             }
@@ -174,18 +193,18 @@ class MainActivity : AppCompatActivity() {
             contaInteira = oldNum
             conta = ""
         }
-
+        minus = false
         pointBreak = false
         newOp = true
         conOp = true
     }
-    fun soma(val1: String, val2: String): Double{
+    fun somar(val1: String, val2: String): Double{
         var resp: Double
         resp = val1.toDouble()?.plus(val2.toDouble())
         conOp = true
         return resp
     }
-    fun menos(val1: String, val2: String): Double{
+    fun diminuir(val1: String, val2: String): Double{
         var resp: Double
         resp = val1.toDouble()?.minus(val2.toDouble())
         conOp = true
