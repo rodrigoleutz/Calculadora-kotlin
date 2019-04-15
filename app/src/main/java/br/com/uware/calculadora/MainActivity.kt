@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity() {
     var contaInteira: String = ""
     var oper: String = "*"
     var oldOper: String = "*"
+    var digitNum: Boolean = false
     var newOp: Boolean = true
     var conOp: Boolean = false
     var pointBreak = false
@@ -149,54 +150,60 @@ class MainActivity : AppCompatActivity() {
         }
         tvResult.text = conta
         newOp = false
+        digitNum = true
     }
     fun btnClickOp(btn: Button){
-        if(!conOp) {
-            when (btn) {
-                buSum -> oper = "+"
-                buSub -> oper = "-"
-                buMul -> oper = "*"
-                buDiv -> oper = "/"
-                buPer -> oper = "%"
-                buEq -> conta = "Err"
+        if(digitNum) {
+            if (!conOp) {
+                when (btn) {
+                    buSum -> oper = "+"
+                    buSub -> oper = "-"
+                    buMul -> oper = "*"
+                    buDiv -> oper = "/"
+                    buPer -> oper = "%"
+                    buEq -> conta = "Err"
+                }
+                oldNum = conta
+                oldOper = oper
+            } else {
+                when (oldOper) {
+                    "+" -> result = somar(oldNum, conta)
+                    "-" -> result = diminuir(oldNum, conta)
+                    "*" -> result = multiplicar(oldNum, conta)
+                    "/" -> result = dividir(oldNum, conta)
+                    "%" -> result = porcento(oldNum, conta)
+                    "=" -> oldNum
+                }
+                oldNum = result.toString()
+                when (btn) {
+                    buSum -> oper = "+"
+                    buSub -> oper = "-"
+                    buMul -> oper = "*"
+                    buDiv -> oper = "/"
+                    buPer -> oper = "%"
+                    buEq -> {
+                        if (oldNum.substring(oldNum.length - 2, oldNum.length) == ".0") oldNum =
+                            oldNum.substring(0, oldNum.length - 2)
+                        oper = "=" + oldNum
+                    }
+                }
+                oldOper = oper
             }
-            oldNum = conta
-            oldOper = oper
+            contaInteira = contaInteira + conta + oper
+            tvConta.text = contaInteira
+            tvResult.text = oldNum
+            if (btn == buEq) {
+                contaInteira = oldNum
+                conta = ""
+            }
+            minus = false
+            pointBreak = false
+            newOp = true
+            conOp = true
         }
         else{
-            when(oldOper){
-                "+" -> result = somar(oldNum,conta)
-                "-" -> result = diminuir(oldNum,conta)
-                "*" -> result = multiplicar(oldNum,conta)
-                "/" -> result = dividir(oldNum,conta)
-                "%" -> result = porcento(oldNum,conta)
-                "=" -> oldNum
-            }
-            oldNum = result.toString()
-            when (btn) {
-                buSum -> oper = "+"
-                buSub -> oper = "-"
-                buMul -> oper = "*"
-                buDiv -> oper = "/"
-                buPer -> oper = "%"
-                buEq -> {
-                    if(oldNum.substring(oldNum.length -2,oldNum.length) == ".0") oldNum = oldNum.substring(0,oldNum.length -2)
-                    oper = "=" + oldNum
-                }
-            }
-            oldOper = oper
+            tvResult.text = "Err"
         }
-        contaInteira = contaInteira + conta + oper
-        tvConta.text = contaInteira
-        tvResult.text = oldNum
-        if(btn == buEq){
-            contaInteira = oldNum
-            conta = ""
-        }
-        minus = false
-        pointBreak = false
-        newOp = true
-        conOp = true
     }
     fun somar(val1: String, val2: String): Double{
         var resp: Double
